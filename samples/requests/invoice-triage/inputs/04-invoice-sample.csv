@@ -1,0 +1,21 @@
+invoice_id,supplier,supplier_in_sap,invoice_number,invoice_date,amount_cad,po_number,po_open_balance,language,bank_matches_master,correct_queue,clerk_queue_august
+S-001,Acme Office Supply,yes,AOS-55120,2026-08-01,412.50,4500012231,500.00,en,yes,PO-matched,PO-matched
+S-002,Hydro Northwind,yes,HN-889102,2026-08-01,18230.11,,,en,yes,Utilities,Non-PO
+S-003,Bureau Plus Inc.,yes,BP-2026-771,2026-08-02,2980.00,,,fr,yes,Non-PO,Non-PO
+S-004,Granite IT Services,yes,GIT-10233,2026-08-02,48500.00,4500012260,48500.00,en,yes,PO-matched,PO-matched
+S-005,Granite IT Services,yes,GIT-10233,2026-08-05,48500.00,4500012260,48500.00,en,yes,Exceptions,PO-matched
+S-006,Lumen Fleet Leasing,yes,LFL-0092,2026-08-03,12750.00,,,en,yes,Exceptions,Non-PO
+S-007,Nordic Steelworks,yes,NSW-7781,2026-08-03,231000.00,4500012002,231000.00,en,yes,Capital,PO-matched
+S-008,Acme Office Supply,yes,AOS-55188,2026-08-04,96.20,4500012231,87.50,en,yes,Exceptions,PO-matched
+S-009,Café Le Coin,no,CLC-41,2026-08-04,640.00,,,fr,n/a,Exceptions,Non-PO
+S-010,Telus Business,yes,TB-8812-0826,2026-08-05,7311.40,,,en,yes,Utilities,Utilities
+S-011,Bright Cleaning Co.,yes,BCC-2201,2026-08-05,3150.00,4500012198,3150.00,en,no,Exceptions,PO-matched
+S-012,Services Techniques Laval,yes,STL-0456,2026-08-06,15880.00,4500012244,15500.00,fr,yes,PO-matched,PO-matched
+S-013,Paper & Pixel Printing,yes,PPP-3011,2026-08-06,1220.00,,,en,yes,Non-PO,Non-PO
+S-014,Granite IT Services,yes,GIT-10301,2026-08-07,9600.00,4500012260,0.00,en,yes,Exceptions,PO-matched
+S-015,Gaz Métro Nord,yes,GMN-55-0826,2026-08-07,4410.75,,,fr,yes,Utilities,Utilities
+S-016,Summit Furniture,yes,SF-90021,2026-08-08,64300.00,4500012271,64300.00,en,yes,Capital,Capital
+S-017,Rapid Courier,yes,RC-118844,2026-08-08,212.00,,,en,yes,Non-PO,Non-PO
+S-018,Acme Office Supply,yes,AOS-55201,2026-08-09,1875.00,4500012290,1800.00,en,yes,PO-matched,PO-matched
+S-019,Orion Consulting,yes,OC-2026-14,2026-08-09,38000.00,,,en,yes,Exceptions,Exceptions
+S-020,Hydro Northwind,yes,HN-889455,2026-08-10,17904.66,,,en,yes,Utilities,Utilities

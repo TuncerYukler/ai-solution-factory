@@ -1,0 +1,20 @@
+BUREAU PLUS INC.
+1200 rue Sainte-Catherine O., Montréal QC H3B 1K9
+TPS 812345678 RT0001 · TVQ 1209876543 TQ0001
+
+FACTURE / INVOICE
+No de facture : BP-2026-771
+Date : 2 août 2026
+Facturé à : Services publics Northwind — Comptes fournisseurs
+
+Description                                   Qté     Prix unit.    Total
+Chaises ergonomiques, modèle E-300              4       575,00     2 300,00
+Livraison et installation                       1       292,00       292,00
+                                                   Sous-total      2 592,00
+                                                   TPS 5 %           129,60
+                                                   TVQ 9,975 %       258,40
+                                                   TOTAL CAD       2 980,00
+
+Bon de commande : aucun
+Conditions : 2 % 10 jours, net 30
+Virement : Banque Laurentienne, transit 01234, compte 5556789

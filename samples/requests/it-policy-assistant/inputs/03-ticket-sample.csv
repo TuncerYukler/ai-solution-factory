@@ -1,0 +1,16 @@
+ticket_id,opened,category,short_description,resolution_summary,handling_minutes
+INC0104411,2026-09-02,how-to,Can I install Zoom on my laptop?,Approved software list allows Zoom via Company Portal. Linked KB0010233.,7
+INC0104420,2026-09-02,how-to,How do I request a second monitor?,Peripheral request form in ServiceNow catalog. Linked KB0010019.,6
+INC0104452,2026-09-03,policy,Can I forward work email to my Gmail?,Not permitted under Acceptable Use Policy s.4.2.,11
+INC0104467,2026-09-03,how-to,Password expired how long should new one be,Minimum 14 characters per Password Standard. Linked KB0010001.,5
+INC0104488,2026-09-04,policy,Can I use my personal iPhone for Outlook?,Allowed if enrolled in Intune (BYOD Policy s.2). Linked KB0010140.,12
+INC0104501,2026-09-04,how-to,Comment changer mon mot de passe?,Lien vers KB0010002 (FR).,6
+INC0104533,2026-09-05,policy,How long do I keep files on the S: drive?,Records Retention Schedule: 2 years then archive. Linked policy RR-03.,14
+INC0104540,2026-09-05,how-to,VPN keeps disconnecting,Not a policy question — routed to network team.,22
+INC0104577,2026-09-08,policy,Am I allowed to use ChatGPT for work?,Generative AI Guideline: only approved tools; public tools not for internal data.,10
+INC0104590,2026-09-08,how-to,How do I share a Teams recording externally?,Not permitted for recordings with staff; KB0010377.,8
+INC0104612,2026-09-09,policy,Can I take my laptop abroad on vacation?,Travel Policy s.5: needs manager + IT approval for listed countries.,13
+INC0104630,2026-09-09,how-to,Where do I find the approved software list?,Link to KB0010230.,4
+INC0104655,2026-09-10,policy,Puis-je utiliser une clé USB personnelle?,Non — Politique sur les supports amovibles s.3.,9
+INC0104671,2026-09-10,how-to,How do I set up MFA on a new phone?,KB0010045 steps.,7
+INC0104702,2026-09-11,policy,Can contractors get admin rights?,Privileged Access Policy s.6: no, except named exception process.,15
