@@ -1,0 +1,52 @@
+{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Write(usecases/**)",
+      "Edit(usecases/**)",
+      "Bash(python3 scripts/new_usecase.py:*)",
+      "Bash(python3 scripts/check_gate.py:*)",
+      "Bash(python3 scripts/build_handoff.py:*)",
+      "Bash(python3 scripts/portfolio_status.py:*)",
+      "Bash(python3 -m unittest:*)"
+    ],
+    "deny": [
+      "WebFetch",
+      "WebSearch",
+      "Bash(curl:*)",
+      "Bash(wget:*)",
+      "Bash(ssh:*)",
+      "Bash(scp:*)",
+      "Bash(pip install:*)",
+      "Edit(usecases/*/inputs/**)",
+      "Write(usecases/*/inputs/**)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit",
+        "hooks": [
+          {"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/scripts/hooks/guard_writes.py\""}
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/scripts/hooks/validate_state.py\""}
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/scripts/hooks/stop_reminder.py\""}
+        ]
+      }
+    ]
+  }
+}

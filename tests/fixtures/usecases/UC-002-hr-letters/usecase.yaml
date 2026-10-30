@@ -1,0 +1,28 @@
+id: UC-002
+slug: hr-letters
+name: Invoice triage assistant
+department: Finance Operations
+sponsor: Dana Lee, Director AP
+smes: [Sam Ortiz, Priya Nair]
+product_owner: Tuncer
+created: 2026-10-01
+phase: 1
+status: in_progress
+risk_tier: 2
+autonomy_target: L1
+data_classification: Protected B
+pattern: null
+gates:
+  g0_intake: {status: passed, date: 2026-10-05, approver: Tuncer, outcome: go}
+  g1_requirements: {status: open}
+  g2_stack: {status: open}
+  g3_design: {status: open}
+  g4_test: {status: open}
+  g5_rollout: {status: open}
+decisions:
+  - date: 2026-10-05
+    decision: Approved for discovery, Tier 2
+    by: Tuncer
+open_questions:
+  - question: Who owns exceptions over $50K?
+    owner: Dana Lee
