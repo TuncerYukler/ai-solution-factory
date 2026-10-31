@@ -19,7 +19,17 @@ Before the first real use case, the product owner fills:
 
 `framework/` is write-protected by a hook. To edit it through Claude, run `touch .claude/maintain-framework`, then delete that file when you're done.
 
-## Run a use case
+## Use it from the web UI
+
+```bash
+python3 ui/server.py
+```
+
+Open http://localhost:8000. From there you can create a use case or load a sample, drop department files into inputs/, run each phase with one click, answer Claude's questions in the chat panel, check gates, and read every document with its diagrams.
+
+Each button runs Claude Code (`claude -p`) in this folder, so the skills, reviewers, hooks and permissions all apply. Claude Code must be signed in: run `claude` once in a terminal and use `/login` if asked. The UI listens only on 127.0.0.1.
+
+## Run a use case from the terminal
 
 Open Claude Code in this folder, then:
 

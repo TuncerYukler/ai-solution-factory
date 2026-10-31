@@ -3,3 +3,5 @@ __pycache__/
 .claude/maintain-framework
 .claude/settings.local.json
 .DS_Store
+usecases/*/.ui-chat.jsonl
+usecases/*/.ui-session

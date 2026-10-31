@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Solution Factory</title>
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+<style>
+:root {
+  --bg: #f6f7f9; --panel: #ffffff; --ink: #1c2330; --muted: #667085; --line: #e3e6eb;
+  --accent: #3b5bdb; --accent-ink: #ffffff; --accent-soft: #eef2ff;
+  --ok: #2f9e44; --ok-soft: #ebfbee; --bad: #e03131; --bad-soft: #fff5f5; --warn: #e8590c; --warn-soft: #fff4e6;
+  --code: #f1f3f5; --shadow: 0 1px 2px rgba(16,24,40,.06);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12151b; --panel: #1a1f27; --ink: #e6e9ef; --muted: #98a2b3; --line: #2a313c;
+    --accent: #748ffc; --accent-ink: #10131a; --accent-soft: #1f2640;
+    --ok: #51cf66; --ok-soft: #14271a; --bad: #ff6b6b; --bad-soft: #2c1717; --warn: #ffa94d; --warn-soft: #2d2114;
+    --code: #232a35; --shadow: none;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+button { font: inherit; cursor: pointer; border-radius: 8px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); padding: 6px 12px; }
+button:hover:not(:disabled) { border-color: var(--accent); }
+button:disabled { opacity: .45; cursor: not-allowed; }
+button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+button.small { padding: 3px 9px; font-size: 12px; }
+button.danger { color: var(--bad); }
+input, textarea, select { font: inherit; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; width: 100%; }
+textarea { resize: vertical; }
+a { color: var(--accent); }
+.app { display: grid; grid-template-columns: 270px 1fr; height: 100vh; }
+aside { border-right: 1px solid var(--line); background: var(--panel); display: flex; flex-direction: column; min-height: 0; }
+.brand { padding: 16px; border-bottom: 1px solid var(--line); }
+.brand h1 { font-size: 15px; margin: 0; }
+.brand small { color: var(--muted); }
+.side-actions { padding: 12px 16px; display: flex; gap: 8px; flex-wrap: wrap; border-bottom: 1px solid var(--line); }
+.uc-list { overflow: auto; flex: 1; padding: 8px; }
+.uc-item { padding: 10px 10px; border-radius: 8px; cursor: pointer; margin-bottom: 2px; }
+.uc-item:hover { background: var(--bg); }
+.uc-item.sel { background: var(--accent-soft); }
+.uc-item .t { font-weight: 600; }
+.uc-item .m { color: var(--muted); font-size: 12px; display: flex; gap: 6px; align-items: center; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); display: inline-block; animation: pulse 1.2s infinite; }
+@keyframes pulse { 50% { opacity: .3; } }
+main { overflow: auto; min-width: 0; }
+.wrap { max-width: 1200px; margin: 0 auto; padding: 20px 24px 40px; }
+.banner { padding: 10px 14px; border-radius: 8px; margin-bottom: 14px; background: var(--warn-soft); color: var(--warn); border: 1px solid var(--warn); }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); }
+.head { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; flex-wrap: wrap; margin-bottom: 14px; }
+.head h2 { margin: 0 0 4px; font-size: 20px; }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { font-size: 12px; padding: 2px 8px; border-radius: 99px; background: var(--bg); border: 1px solid var(--line); color: var(--muted); }
+.chip b { color: var(--ink); font-weight: 600; }
+.chip.ok { background: var(--ok-soft); color: var(--ok); border-color: transparent; }
+.chip.bad { background: var(--bad-soft); color: var(--bad); border-color: transparent; }
+.next { display: flex; align-items: center; gap: 12px; padding: 12px 16px; margin-bottom: 14px; flex-wrap: wrap; }
+.next .lbl { color: var(--muted); }
+.gates { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; margin-bottom: 14px; }
+.gate { padding: 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel); display: flex; flex-direction: column; gap: 6px; }
+.gate.passed { border-color: var(--ok); }
+.gate.failed { border-color: var(--bad); }
+.gate.current { box-shadow: 0 0 0 2px var(--accent-soft); border-color: var(--accent); }
+.gate .n { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+.gate .p { font-weight: 600; font-size: 13px; }
+.gate .s { font-size: 12px; color: var(--muted); min-height: 18px; }
+.gate .s.ok { color: var(--ok); } .gate .s.bad { color: var(--bad); }
+.gate .btns { display: flex; gap: 4px; flex-wrap: wrap; margin-top: auto; }
+.tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--line); padding: 0 8px; }
+.tab { border: 0; background: none; border-bottom: 2px solid transparent; border-radius: 0; padding: 10px 12px; color: var(--muted); }
+.tab.on { color: var(--ink); border-bottom-color: var(--accent); font-weight: 600; }
+.pane { padding: 16px; }
+.chat { display: flex; flex-direction: column; height: 62vh; min-height: 380px; }
+.msgs { flex: 1; overflow: auto; padding-right: 6px; }
+.msg { margin: 0 0 12px; }
+.msg.user { display: flex; justify-content: flex-end; }
+.msg.user .bubble { background: var(--accent); color: var(--accent-ink); border-radius: 12px 12px 2px 12px; padding: 8px 12px; max-width: 75%; white-space: pre-wrap; }
+.msg.assistant .bubble { background: var(--bg); border-radius: 12px 12px 12px 2px; padding: 4px 14px; max-width: 92%; }
+.msg.tool { color: var(--muted); font-size: 12px; font-family: ui-monospace, Menlo, monospace; margin: 0 0 4px 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.msg.error .bubble { background: var(--bad-soft); color: var(--bad); border-radius: 8px; padding: 8px 12px; }
+.composer { display: flex; gap: 8px; padding-top: 12px; border-top: 1px solid var(--line); align-items: flex-end; }
+.composer textarea { min-height: 44px; max-height: 160px; }
+.working { color: var(--muted); font-size: 13px; padding: 4px 0 8px; display: flex; gap: 8px; align-items: center; }
+.split { display: grid; grid-template-columns: 260px 1fr; gap: 16px; min-height: 60vh; }
+.files { border-right: 1px solid var(--line); padding-right: 12px; overflow: auto; max-height: 70vh; }
+.files .grp { font-size: 11px; text-transform: uppercase; color: var(--muted); margin: 12px 0 4px; letter-spacing: .04em; }
+.files .f { padding: 5px 8px; border-radius: 6px; cursor: pointer; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.files .f:hover { background: var(--bg); }
+.files .f.sel { background: var(--accent-soft); }
+.viewer { min-width: 0; overflow: auto; max-height: 70vh; }
+.empty { color: var(--muted); padding: 30px; text-align: center; }
+.md h1 { font-size: 20px; } .md h2 { font-size: 16px; margin-top: 22px; border-bottom: 1px solid var(--line); padding-bottom: 4px; } .md h3 { font-size: 14px; }
+.md table { border-collapse: collapse; margin: 8px 0; font-size: 13px; display: block; overflow-x: auto; }
+.md th, .md td { border: 1px solid var(--line); padding: 5px 9px; text-align: left; vertical-align: top; }
+.md th { background: var(--bg); }
+.md code { background: var(--code); padding: 1px 5px; border-radius: 4px; font-size: 12.5px; }
+.md pre { background: var(--code); padding: 10px 12px; border-radius: 8px; overflow-x: auto; }
+.md pre code { background: none; padding: 0; }
+.md .mermaid { background: #fff; border-radius: 8px; padding: 10px; }
+.drop { border: 2px dashed var(--line); border-radius: 10px; padding: 18px; text-align: center; color: var(--muted); margin-bottom: 12px; cursor: pointer; }
+.drop.over { border-color: var(--accent); background: var(--accent-soft); }
+table.grid { width: 100%; border-collapse: collapse; }
+table.grid th, table.grid td { padding: 9px 10px; border-bottom: 1px solid var(--line); text-align: left; }
+table.grid th { color: var(--muted); font-weight: 500; font-size: 12px; }
+table.grid tr.click { cursor: pointer; } table.grid tr.click:hover td { background: var(--bg); }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.log h3 { font-size: 13px; margin: 0 0 8px; }
+.log li { margin-bottom: 6px; }
+.muted { color: var(--muted); }
+dialog { border: 1px solid var(--line); border-radius: 12px; background: var(--panel); color: var(--ink); width: min(440px, 92vw); padding: 20px; }
+dialog::backdrop { background: rgba(0,0,0,.35); }
+dialog label { display: block; font-size: 12px; color: var(--muted); margin: 10px 0 4px; }
+.row { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+.toast { position: fixed; bottom: 18px; right: 18px; background: var(--ink); color: var(--bg); padding: 10px 14px; border-radius: 8px; max-width: 420px; white-space: pre-wrap; font-size: 13px; display: none; }
+@media (max-width: 900px) {
+  .app { grid-template-columns: 1fr; height: auto; }
+  aside { max-height: 40vh; }
+  .gates { grid-template-columns: repeat(2, 1fr); }
+  .split, .two { grid-template-columns: 1fr; }
+  .files { border-right: 0; max-height: 30vh; }
+  .wrap { padding: 16px; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside>
+    <div class="brand"><h1>AI Solution Factory</h1><small>Product owner workspace</small></div>
+    <div class="side-actions">
+      <button class="primary" onclick="openNew()">+ New use case</button>
+      <select id="sampleSel" onchange="loadSample(this)" style="width:auto"><option value="">Load sample…</option></select>
+    </div>
+    <div class="uc-list" id="ucList"></div>
+    <div style="padding:10px 16px;border-top:1px solid var(--line)"><a href="#" onclick="select(null);return false">Portfolio overview</a></div>
+  </aside>
+  <main><div class="wrap" id="main"></div></main>
+</div>
+
+<dialog id="newDlg">
+  <h3 style="margin:0">New use case</h3>
+  <form method="dialog" onsubmit="createUc(event)">
+    <label>Short ID (slug) *</label><input id="nSlug" placeholder="invoice-triage" pattern="[a-z0-9]+(-[a-z0-9]+)*" required>
+    <label>Name</label><input id="nName" placeholder="Invoice triage assistant">
+    <label>Department</label><input id="nDept" placeholder="Finance Operations">
+    <label>Sponsor (name, title)</label><input id="nSponsor">
+    <label>SMEs (comma separated)</label><input id="nSmes">
+    <div class="row"><button type="button" onclick="newDlg.close()">Cancel</button><button class="primary">Create</button></div>
+  </form>
+</dialog>
+<div class="toast" id="toast"></div>
+
+<script>
+const PHASES = [
+  {n: 0, name: "Intake & triage", cmd: "intake", doc: "00-intake/intake.md", gate: "g0_intake"},
+  {n: 1, name: "Requirements", cmd: "discover", doc: "01-requirements/usecase-canvas.md", gate: "g1_requirements"},
+  {n: 2, name: "Pattern & stack", cmd: "stack", doc: "02-stack/component-map.md", gate: "g2_stack"},
+  {n: 3, name: "Solution design", cmd: "design", doc: "03-design/solution-architecture.md", gate: "g3_design"},
+  {n: 4, name: "Testing", cmd: "test-plan", doc: "04-testing/test-plan.md", gate: "g4_test"},
+  {n: 5, name: "Pilot & rollout", cmd: "rollout", doc: "05-rollout/rollout-plan.md", gate: "g5_rollout"},
+];
+const GROUPS = {"00-intake": "Intake", "01-requirements": "Requirements", "02-stack": "Stack", "03-design": "Design",
+  "04-testing": "Testing", "05-rollout": "Rollout", "reviews": "Reviews", "handoff": "Handoff package", "inputs": "Inputs"};
+
+let S = {list: null, sel: null, uc: null, tab: "chat", file: null, streaming: false, poll: null};
+mermaid.initialize({startOnLoad: false, theme: "default", securityLevel: "strict"});
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
+function toast(msg, ms = 4000) { const t = $("toast"); t.textContent = msg; t.style.display = "block"; clearTimeout(t._h); t._h = setTimeout(() => t.style.display = "none", ms); }
+async function api(path, body) {
+  const r = await fetch(path, body ? {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body)} : {});
+  const j = await r.json();
+  if (!r.ok) throw new Error(j.error || j.output || r.statusText);
+  return j;
+}
+function md(text) { return DOMPurify.sanitize(marked.parse(text || "")); }
+async function renderMermaid(root) {
+  const nodes = [];
+  root.querySelectorAll("pre code.language-mermaid").forEach((c) => {
+    const d = document.createElement("div"); d.className = "mermaid"; d.textContent = c.textContent;
+    c.parentElement.replaceWith(d); nodes.push(d);
+  });
+  if (nodes.length) { try { await mermaid.run({nodes}); } catch (e) { /* leave source visible */ } }
+}
+
+// ---------- data ----------
+async function loadList() {
+  S.list = await api("/api/usecases");
+  const sel = $("sampleSel");
+  if (sel.options.length === 1) S.list.samples.forEach((s) => sel.add(new Option(s, s)));
+  renderList();
+}
+async function loadUc() {
+  if (!S.sel) { S.uc = null; return; }
+  S.uc = await api("/api/usecase?id=" + S.sel);
+}
+async function refresh() {
+  await loadList();
+  await loadUc();
+  render();
+}
+async function select(id) {
+  S.sel = id; S.file = null; S.tab = "chat";
+  if (id) api("/api/activate", {id}).catch(() => {});
+  await refresh();
+}
+
+// ---------- sidebar ----------
+function renderList() {
+  const el = $("ucList");
+  if (!S.list.usecases.length) { el.innerHTML = '<div class="empty">No use cases yet.<br>Create one or load a sample.</div>'; return; }
+  el.innerHTML = S.list.usecases.map((u) => `
+    <div class="uc-item ${u.id === S.sel ? "sel" : ""}" onclick="select('${u.id}')">
+      <div class="t">${esc(u.name)}</div>
+      <div class="m">${u.running ? '<span class="dot"></span>' : ""}${esc(u.id)} · phase ${u.phase} · ${u.risk_tier ? "tier " + u.risk_tier : "no tier"} · ${esc(u.status)}</div>
+    </div>`).join("");
+}
+
+// ---------- main ----------
+function render() {
+  const m = $("main");
+  const warn = S.list && !S.list.tech_stack_filled
+    ? '<div class="banner">framework/reference/tech-stack.md has no approved technologies yet, so gate 2 will fail. Load a sample to fill it with sample data, or fill it in yourself.</div>' : "";
+  if (!S.uc) { m.innerHTML = warn + portfolio(); return; }
+  const st = S.uc.state;
+  const docs = new Set(S.uc.documents.map((d) => d.path));
+  m.innerHTML = warn + header(st) + nextStep(st, docs) + gates(st, docs) + `
+    <div class="card">
+      <div class="tabs">
+        ${["chat", "documents", "inputs", "log"].map((t) => `<button class="tab ${S.tab === t ? "on" : ""}" onclick="setTab('${t}')">${{chat: "Chat with Claude", documents: "Documents (" + S.uc.documents.length + ")", inputs: "Inputs (" + S.uc.inputs.length + ")", log: "Decisions & questions"}[t]}</button>`).join("")}
+      </div>
+      <div class="pane" id="pane"></div>
+    </div>`;
+  renderPane();
+}
+
+function portfolio() {
+  const rows = S.list ? S.list.usecases : [];
+  return `<div class="head"><div><h2>Portfolio</h2><div class="muted">${rows.length} use case${rows.length === 1 ? "" : "s"}</div></div></div>
+    <div class="card" style="padding:4px 8px">${rows.length ? `<table class="grid"><tr><th>ID</th><th>Name</th><th>Department</th><th>Phase</th><th>Tier</th><th>Status</th><th>Next gate</th></tr>
+    ${rows.map((u) => { const g = PHASES.find((p) => u.gates[p.gate].status !== "passed");
+      return `<tr class="click" onclick="select('${u.id}')"><td>${esc(u.id)}</td><td>${esc(u.name)}</td><td>${esc(u.department)}</td><td>${u.phase}</td><td>${u.risk_tier || "—"}</td><td>${esc(u.status)}${u.valid ? "" : ' <span class="chip bad">invalid</span>'}</td><td>${g ? "G" + g.n : "—"}</td></tr>`; }).join("")}</table>`
+    : '<div class="empty">Start with <b>+ New use case</b>, or pick a sample from <b>Load sample…</b> to try the factory.</div>'}</div>`;
+}
+
+function header(st) {
+  const chip = (k, v) => `<span class="chip">${k} <b>${esc(v ?? "—")}</b></span>`;
+  return `<div class="head"><div><h2>${esc(st.name)}</h2>
+      <div class="muted">${esc(st.id)} · ${esc(st.department)} · sponsor ${esc(st.sponsor)}</div></div>
+    <div class="chips">${chip("Status", st.status)}${chip("Tier", st.risk_tier)}${chip("Autonomy", st.autonomy_target)}${chip("Data", st.data_classification)}${chip("Pattern", st.pattern)}
+      ${st.valid ? "" : '<span class="chip bad">usecase.yaml invalid</span>'}</div></div>`;
+}
+
+function currentIndex(st) { const i = PHASES.findIndex((p) => st.gates[p.gate].status !== "passed"); return i === -1 ? 6 : i; }
+
+function nextStep(st, docs) {
+  if (["rejected", "parked"].includes(st.status)) return `<div class="card next"><span class="lbl">This use case is <b>${st.status}</b>.</span></div>`;
+  const i = currentIndex(st);
+  if (i === 6) return `<div class="card next"><span class="lbl">All gates passed — this use case is live.</span></div>`;
+  const p = PHASES[i];
+  let label, action;
+  if (i === 4 && !docs.has("handoff/README.md")) { label = "Build the handoff package for developers"; action = `runCmd('handoff')`; }
+  else if (docs.has(p.doc)) { label = `Check gate G${i} (${p.name})`; action = `runCmd('gate', ${i})`; }
+  else { label = `Run ${p.name} (/${p.cmd})`; action = `runCmd('${p.cmd}')`; }
+  return `<div class="card next"><span class="lbl">Next step</span><button class="primary" ${S.streaming || st.running ? "disabled" : ""} onclick="${action}">${label}</button>
+    ${st.open_questions.length ? `<span class="muted">${st.open_questions.length} open question${st.open_questions.length > 1 ? "s" : ""}</span>` : ""}</div>`;
+}
+
+function gates(st, docs) {
+  const busy = S.streaming || st.running, cur = currentIndex(st);
+  return `<div class="gates">${PHASES.map((p) => {
+    const g = st.gates[p.gate], prevOk = p.n === 0 || st.gates[PHASES[p.n - 1].gate].status === "passed";
+    const runOk = p.n >= 4 ? st.gates.g3_design.status === "passed" : prevOk;
+    const s = g.status === "passed" ? `<span class="s ok">✓ ${esc(g.date)} · ${esc(g.approver)}</span>` : g.status === "failed" ? '<span class="s bad">✗ failed — fix and re-check</span>' : `<span class="s">${docs.has(p.doc) ? "drafted" : "not started"}</span>`;
+    return `<div class="gate ${g.status} ${p.n === cur ? "current" : ""}"><span class="n">Phase ${p.n} · G${p.n}</span><span class="p">${p.name}</span>${s}
+      <div class="btns"><button class="small" ${busy || !runOk ? "disabled" : ""} onclick="runCmd('${p.cmd}')">Run</button>
+      <button class="small" ${busy || !prevOk ? "disabled" : ""} onclick="runCmd('gate', ${p.n})">Check gate</button>
+      ${p.n === 3 ? `<button class="small" ${busy || g.status !== "passed" ? "disabled" : ""} onclick="runCmd('handoff')">Handoff</button>` : ""}</div></div>`;
+  }).join("")}</div>`;
+}
+
+function setTab(t) { S.tab = t; render(); }
+
+function renderPane() {
+  const el = $("pane");
+  if (S.tab === "chat") return renderChat(el);
+  if (S.tab === "documents") return renderFiles(el, S.uc.documents, false);
+  if (S.tab === "inputs") return renderFiles(el, S.uc.inputs, true);
+  const st = S.uc.state;
+  el.innerHTML = `<div class="two log">
+    <div><h3>Open questions</h3>${st.open_questions.length ? `<ul>${st.open_questions.map((q) => `<li>${esc(q.question)} <span class="muted">— ${esc(q.owner)}</span></li>`).join("")}</ul>` : '<div class="muted">None</div>'}</div>
+    <div><h3>Decision log</h3>${st.decisions.length ? `<ul>${st.decisions.slice().reverse().map((d) => `<li><span class="muted">${esc(d.date)}</span> ${esc(d.decision)} <span class="muted">— ${esc(d.by)}</span></li>`).join("")}</ul>` : '<div class="muted">No decisions yet</div>'}</div></div>`;
+}
+
+// ---------- chat ----------
+function msgHtml(e) {
+  if (e.kind === "user") return `<div class="msg user"><div class="bubble">${esc(e.text)}</div></div>`;
+  if (e.kind === "assistant") return `<div class="msg assistant"><div class="bubble md">${md(e.text)}</div></div>`;
+  if (e.kind === "tool") return `<div class="msg tool">↳ ${esc(e.text)}</div>`;
+  if (e.kind === "error") return `<div class="msg error"><div class="bubble">${esc(e.text)}</div></div>`;
+  return "";
+}
+function renderChat(el) {
+  const busy = S.streaming || S.uc.state.running;
+  const log = S.uc.chat;
+  el.innerHTML = `<div class="chat"><div class="msgs" id="msgs">${log.length ? log.map(msgHtml).join("") :
+      '<div class="empty">Use the <b>Next step</b> button or a phase card to start. Claude\'s questions appear here — answer them below.</div>'}</div>
+    <div class="working" id="working" style="display:${busy ? "flex" : "none"}"><span class="dot"></span> Claude is working… <button class="small danger" onclick="stopRun()">Stop</button></div>
+    <div class="composer"><textarea id="chatIn" placeholder="Answer Claude's questions or ask something about this use case…" ${busy ? "disabled" : ""}
+      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg()}"></textarea>
+      <button class="primary" onclick="sendMsg()" ${busy ? "disabled" : ""}>Send</button>
+      <button class="small" title="Start a fresh conversation" onclick="clearChat()" ${busy ? "disabled" : ""}>Clear</button></div></div>`;
+  const msgs = $("msgs"); msgs.scrollTop = msgs.scrollHeight;
+}
+function appendMsg(e) {
+  const msgs = $("msgs"); if (!msgs) return;
+  if (msgs.querySelector(".empty")) msgs.innerHTML = "";
+  msgs.insertAdjacentHTML("beforeend", msgHtml(e)); msgs.scrollTop = msgs.scrollHeight;
+}
+
+async function stream(body) {
+  S.streaming = true; render(); S.tab = "chat"; render();
+  try {
+    const r = await fetch("/api/run", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body)});
+    if (!r.ok) { const j = await r.json().catch(() => ({})); throw new Error(j.error || r.statusText); }
+    const reader = r.body.getReader(), dec = new TextDecoder();
+    let buf = "";
+    for (;;) {
+      const {value, done} = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, {stream: true});
+      let i;
+      while ((i = buf.indexOf("\n")) >= 0) {
+        const line = buf.slice(0, i).trim(); buf = buf.slice(i + 1);
+        if (!line) continue;
+        const ev = JSON.parse(line);
+        if (ev.kind === "done") { if (ev.error && ev.text) appendMsg({kind: "error", text: ev.text}); }
+        else appendMsg(ev);
+        if (ev.kind === "tool") softRefresh();
+      }
+    }
+  } catch (e) { toast(e.message); }
+  S.streaming = false;
+  await refresh();
+}
+let softT = null;
+function softRefresh() {  // keep gates/documents current while Claude writes, without wiping the chat
+  clearTimeout(softT);
+  softT = setTimeout(async () => { await loadUc(); await loadList(); const t = S.tab; if (t !== "chat") renderPane(); }, 1500);
+}
+function runCmd(command, arg) { if (!S.sel) return; stream({id: S.sel, command, arg}); }
+function sendMsg() { const t = $("chatIn").value.trim(); if (!t) return; stream({id: S.sel, message: t}); }
+async function stopRun() { await api("/api/stop", {id: S.sel}); toast("Stopping…"); }
+async function clearChat() { if (!confirm("Clear this chat and start the next message in a fresh conversation? Documents are not affected.")) return; await api("/api/clear-chat", {id: S.sel}); await refresh(); }
+
+// ---------- files ----------
+function renderFiles(el, files, isInputs) {
+  const groups = {};
+  files.forEach((f) => { const g = f.path.split("/")[0]; (groups[g] = groups[g] || []).push(f); });
+  el.innerHTML = `${isInputs ? `<div class="drop" id="drop" onclick="$('fileIn').click()">Drop meeting notes, documents or sample data here, or click to choose files.<br><small>Files go into inputs/ — Claude reads them and never edits them.</small><input type="file" id="fileIn" multiple hidden onchange="upload(this.files)"></div>` : ""}
+    <div class="split"><div class="files">${files.length ? Object.keys(groups).map((g) => `<div class="grp">${GROUPS[g] || g}</div>` +
+      groups[g].map((f) => `<div class="f ${S.file === f.path ? "sel" : ""}" title="${esc(f.path)}" onclick="openFile('${esc(f.path)}')">${esc(f.path.split("/").slice(1).join("/"))}</div>`).join("")).join("")
+      : `<div class="muted">${isInputs ? "No inputs yet." : "No documents yet. Run the first phase."}</div>`}</div>
+    <div class="viewer md" id="viewer"><div class="empty">Select a file</div></div></div>`;
+  if (isInputs) {
+    const d = $("drop");
+    d.ondragover = (e) => { e.preventDefault(); d.classList.add("over"); };
+    d.ondragleave = () => d.classList.remove("over");
+    d.ondrop = (e) => { e.preventDefault(); d.classList.remove("over"); upload(e.dataTransfer.files); };
+  }
+  if (S.file && files.some((f) => f.path === S.file)) openFile(S.file);
+}
+async function openFile(path) {
+  S.file = path;
+  document.querySelectorAll(".files .f").forEach((n) => n.classList.toggle("sel", n.title === path));
+  const v = $("viewer");
+  try {
+    const {content} = await api(`/api/file?id=${S.sel}&path=${encodeURIComponent(path)}`);
+    if (path.endsWith(".md")) { v.innerHTML = md(content); await renderMermaid(v); }
+    else if (path.endsWith(".csv")) v.innerHTML = csvTable(content);
+    else v.innerHTML = `<pre>${esc(content)}</pre>`;
+  } catch (e) { v.innerHTML = `<div class="empty">${esc(e.message)}</div>`; }
+}
+function csvTable(text) {
+  const rows = []; let row = [], cell = "", q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) { if (c === '"' && text[i + 1] === '"') { cell += '"'; i++; } else if (c === '"') q = false; else cell += c; }
+    else if (c === '"') q = true; else if (c === ",") { row.push(cell); cell = ""; }
+    else if (c === "\n") { row.push(cell); rows.push(row); row = []; cell = ""; } else if (c !== "\r") cell += c;
+  }
+  if (cell || row.length) { row.push(cell); rows.push(row); }
+  if (!rows.length) return '<div class="empty">Empty file</div>';
+  return `<p class="muted">${rows.length - 1} rows</p><table><tr>${rows[0].map((h) => `<th>${esc(h)}</th>`).join("")}</tr>${rows.slice(1, 501).map((r) => `<tr>${r.map((c) => `<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</table>`;
+}
+async function upload(fileList) {
+  for (const f of fileList) {
+    const b64 = await new Promise((res) => { const r = new FileReader(); r.onload = () => res(r.result.split(",")[1] || ""); r.readAsDataURL(f); });
+    try { await api("/api/upload", {id: S.sel, name: f.name, content: b64}); toast("Added " + f.name); }
+    catch (e) { toast(e.message); }
+  }
+  await refresh(); S.tab = "inputs"; render();
+}
+
+// ---------- create ----------
+function openNew() { $("newDlg").showModal(); $("nSlug").focus(); }
+async function createUc(e) {
+  e.preventDefault();
+  try {
+    const r = await api("/api/new", {slug: $("nSlug").value, name: $("nName").value, department: $("nDept").value, sponsor: $("nSponsor").value, smes: $("nSmes").value});
+    $("newDlg").close(); e.target.reset();
+    await select(r.id); S.tab = "inputs"; render();
+    toast("Created " + r.id + ". Add the department's material, then run Intake.");
+  } catch (err) { toast(err.message); }
+}
+async function loadSample(sel) {
+  const name = sel.value; sel.value = ""; if (!name) return;
+  try { const r = await api("/api/sample", {name}); await select(r.id); toast(r.output.trim(), 7000); }
+  catch (e) { toast(e.message, 7000); }
+}
+
+// ---------- boot ----------
+(async () => {
+  await loadList();
+  const start = S.list.active && S.list.usecases.some((u) => u.id === S.list.active) ? S.list.active : null;
+  await select(start);
+  // pick up runs started in another tab, and keep the sidebar fresh
+  S.poll = setInterval(async () => {
+    if (S.streaming) return;
+    const before = S.uc && S.uc.state.running;
+    await loadList();
+    if (S.sel && (before || S.list.usecases.find((u) => u.id === S.sel)?.running)) { await loadUc(); render(); }
+  }, 4000);
+})();
+</script>
+</body>
+</html>
