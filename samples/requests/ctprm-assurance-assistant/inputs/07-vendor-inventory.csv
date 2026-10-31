@@ -1,0 +1,21 @@
+vendor_id,vendor_name,service,criticality,review_cycle_months,last_assessment,next_review_due,residual_rating,soc2_period_end,iso27001_expiry,last_pentest,assigned_analyst,status
+V-0012,HarborTrust Payroll Services,Payroll processing,High,12,2026-06-18,2027-06-18,Medium,2025-12-31,2027-03-10,2026-02-15,Chloe Bernard,Active
+V-0031,Summit Data Systems,Core banking data warehouse support,Critical,12,2025-09-30,2026-09-30,High,2025-06-30,2026-11-20,2025-08-01,Raj Patel,Active
+V-0044,Northstar Card Processing,Card authorisation switch,Critical,12,2026-02-11,2027-02-11,Medium,2025-12-31,2027-05-01,2026-01-20,Raj Patel,Active
+V-0057,Maple Document Imaging,Mortgage document scanning,High,12,2025-08-14,2026-08-14,Medium,2025-03-31,,2025-05-10,Aaron Kim,Active
+V-0063,Blue Heron Call Centre,Overflow customer contact centre,High,12,2026-04-02,2027-04-02,Medium,2025-12-31,2026-12-01,2026-03-03,Chloe Bernard,Active
+V-0078,Quantia Analytics,Credit model hosting,Critical,12,2026-01-25,2027-01-25,Medium,2025-09-30,2027-01-31,2025-11-12,Raj Patel,Active
+V-0081,ClearPath Courier,Secure document courier,Medium,24,2025-03-10,2027-03-10,Low,,,,Aaron Kim,Active
+V-0095,Summit Furniture,Office furniture supply,Low,36,2024-05-02,2027-05-02,Low,,,,Aaron Kim,Active
+V-0102,Ironbark Backup,Offsite backup storage,High,12,2025-11-30,2026-11-30,Medium,2025-06-30,2026-11-05,2025-10-20,Nadia Osei,Active
+V-0110,LexiSign,E-signature platform,High,12,2026-07-07,2027-07-07,Low,2026-03-31,2027-09-15,2026-05-01,Nadia Osei,Active
+V-0117,Granite Cloud Hosting,IaaS for digital banking non-prod,High,12,2025-10-02,2026-10-02,Medium,2025-06-30,2026-06-30,2025-09-14,Nadia Osei,Active
+V-0123,Pacific Fraud Intelligence,Fraud scoring API,Critical,12,2026-05-19,2027-05-19,Medium,2026-03-31,2027-04-18,2026-04-02,Raj Patel,Active
+V-0130,OpenFin Aggregation,Open banking data aggregation,High,12,2026-09-01,2027-09-01,Medium,2026-06-30,2027-02-28,2026-07-15,Chloe Bernard,Active
+V-0138,Cedar HR Cloud,HRIS platform,High,12,2025-12-12,2026-12-12,Low,2025-09-30,2027-06-30,2025-11-01,Aaron Kim,Active
+V-0144,Atlas Print & Mail,Statement printing and mailing,High,12,2026-03-15,2027-03-15,Medium,2025-12-31,2026-11-30,2026-02-10,Nadia Osei,Active
+V-0151,Tidewater Legal eDiscovery,Litigation eDiscovery hosting,Medium,24,2025-01-20,2027-01-20,Low,2024-12-31,2026-10-01,2024-11-15,Aaron Kim,Active
+V-0159,Borealis Translation,Document translation,Medium,24,2024-10-28,2026-10-28,Low,,2026-09-30,,Nadia Osei,Active
+V-0166,Keystone Identity Verification,Digital onboarding ID checks,Critical,12,2026-08-20,2027-08-20,Medium,2026-03-31,2027-10-02,2026-06-11,Raj Patel,Active
+V-0172,Vantage Market Data,Market data feeds,Medium,24,2025-06-30,2027-06-30,Low,2025-03-31,2027-01-15,,Chloe Bernard,Active
+V-0180,CloudLedger Inc.,Treasury reconciliation SaaS,Critical,12,,,,2026-03-31,2026-12-14,2026-02-20,Chloe Bernard,Onboarding

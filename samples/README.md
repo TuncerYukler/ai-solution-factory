@@ -6,6 +6,7 @@ Fictional organization: **Northwind Public Services**. All names, numbers and su
 |---|---|---|---|
 | `it-policy-assistant` | IT Service Desk | 1 (L0, Unclassified) | Fast lane, RAG pattern, bilingual sources, a KB article that contradicts policy |
 | `invoice-triage` | Finance Operations | 2 (L1, Protected B) | Full design, reuse from the component library, fraud rule (bank details), an invoice with an embedded prompt injection |
+| `ctprm-assurance-assistant` | Cyber Third-Party Risk Management | 3 likely (L1–L2, Protected B) | Three features in one request (document analyzer, report drafting, monitoring agent), SOC 2 / ISO / pen test / SIG for one vendor with planted gaps, vendor inventory and an event feed with a prompt injection |
 
 Both leave some questions unanswered on purpose, so `/intake` and `/discover` have something to ask you.
 
@@ -24,6 +25,8 @@ This fills `framework/reference/tech-stack.md` and `component-library.md` with s
 - Index freshness: Tom Fischer owns policies; Aisha Karim owns KB re-indexing, nightly.
 - Chat logs: keep 1 year for improvement, no personal data beyond the user ID.
 - Autonomy target: L0. Data classification: Unclassified.
+
+**C-TPRM assurance assistant**: see `requests/ctprm-assurance-assistant/request.md`.
 
 **Invoice triage**
 - Exceptions over $50K: the Controller, Ruth Adams.

@@ -1,0 +1,14 @@
+question_id,domain,question,vendor_response,vendor_comment
+SIG-A.1,Risk management,Is there a formal information security program approved by management?,Yes,ISP v6 approved by CEO 2026-02
+SIG-B.3,Policies,Are security policies reviewed at least annually?,Yes,
+SIG-D.2,Asset management,Is client data stored only in the client's required jurisdiction?,Yes,All Northwind data is stored in Canada (AWS ca-central-1)
+SIG-D.5,Data protection,Is client data securely deleted at contract termination with a certificate?,Yes,Deletion certificate within 30 days
+SIG-G.4,Operations,Are critical vulnerabilities remediated within 15 days?,Yes,SLA: 15 days critical / 30 days high
+SIG-H.1,Access control,Is MFA required for all remote and privileged access?,Yes,Okta MFA
+SIG-H.6,Access control,Is privileged access reviewed at least quarterly?,Yes,Automated in IGA tool
+SIG-J.2,Incident management,Will clients be notified of incidents affecting their data within 24 hours?,Yes,Within 72 hours per standard MSA
+SIG-K.1,Business resilience,Is the DR plan tested at least annually?,Yes,Last test January 2026
+SIG-K.3,Business resilience,What is the RTO for the contracted service?,8 hours,
+SIG-L.2,Fourth parties,Are all subcontractors with access to client data disclosed?,Yes,AWS and Okta
+SIG-E.4,Human resources,Are background checks performed for staff with client data access?,Yes,
+SIG-U.1,Application security,Is SAST/DAST performed for all releases?,Yes,SAST in CI; DAST quarterly
