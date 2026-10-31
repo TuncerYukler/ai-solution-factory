@@ -16,7 +16,7 @@ Apply the common rules in CLAUDE.md. Use case: `$ARGUMENTS` if given, else `usec
    - NFRs: accuracy (`Target: nn%`), latency, volume, availability, audit and retention, privacy, languages, accessibility; success metrics with baseline and target; acceptance criteria numbered `AC-01…`.
 5. If `inputs/` is too thin to fill the canvas, write `usecases/<id>/01-requirements/interview-guide.md` (questions grouped by canvas section) and tell the product owner to run the session and drop the notes in `inputs/`. Stop there.
 6. Ask the product owner about the gaps, max 5 questions per round.
-   Anything still unknown: write `OPEN: <question>` and add it to `open_questions` with an owner.
+   Anything still unknown: write `OPEN: OQ-nn <question>` and add it to `open_questions` with the next free `id` and an owner.
 7. For each to-be step, assign actor (AI / human / system) and autonomy level using `framework/reference/autonomy-levels.md`. Never exceed `autonomy_target`. Replace the example Mermaid flowchart with the real to-be flow.
 8. Delegate review to the **requirements-analyst** subagent. Save its report to `reviews/phase1-review.md` and apply fixes.
 9. Update `usecase.yaml`: `phase: 1`, append a decision entry, update `open_questions`. Validate with `python3 scripts/check_gate.py --validate-only <id>`.

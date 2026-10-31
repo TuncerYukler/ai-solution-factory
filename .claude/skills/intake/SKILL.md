@@ -12,7 +12,7 @@ Apply the common rules in CLAUDE.md. Use case: `$ARGUMENTS` if given, else `usec
 2. Read everything in `inputs/`. If it is empty, say so and offer to interview the product owner instead.
 3. Copy `framework/templates/00-intake.md` to `usecases/<id>/00-intake/intake.md`. Replace `{{id}}` and `{{name}}`.
 4. Fill every section from what you read: request summary, problem and pain, affected roles, volume, desired outcome. List the gaps.
-5. Ask the product owner about the gaps, max 5 questions per round. Anything still unknown: write `OPEN: <question>` and add it to `open_questions` with an owner.
+5. Ask the product owner about the gaps, max 5 questions per round. Anything still unknown: write `OPEN: OQ-nn <question>` and add it to `open_questions` with the next free `id` and an owner.
 6. Score value (`Score: n/5`) and feasibility (`Score: n/5`: data availability, process stability, integration access), each with rationale.
 7. Assign the risk tier with `framework/reference/risk-tiers.md` (data sensitivity, decision impact, autonomy wanted, who is affected; highest factor wins). Write `Tier: n` and the rationale. Confirm `data_classification` and `autonomy_target` with the product owner.
 8. Write `Recommendation: go | no-go | park` and a one-paragraph rationale.

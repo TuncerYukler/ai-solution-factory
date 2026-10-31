@@ -14,7 +14,7 @@ Apply the common rules in CLAUDE.md. Use case: `$ARGUMENTS` if given, else `usec
 4. Pick the pattern: the **simplest** that meets the requirements. Explain why and name the runner-up.
 5. Copy `framework/templates/02-component-map.md` to `02-stack/component-map.md`. Fill `Pattern: <id>`, then every one of the 11 layers: `needed` / `not needed`, technology (only from tech-stack.md), `reuse` / `extend` / `new` (check component-library.md first), owner. Draw the component diagram.
 6. Tier 2+: copy `02-tech-decisions.md` to `02-stack/tech-decisions.md` and write one `TD-nn` record per non-obvious choice. Tier 1: optional.
-7. Ask the product owner about gaps, max 5 questions per round. Unknowns → `OPEN:` + `open_questions`.
+7. Ask the product owner about gaps, max 5 questions per round. Unknowns → `OPEN: OQ-nn <question>` + `open_questions` entry with that `id` and an owner.
 8. Delegate review to the **solution-architect** subagent. Save to `reviews/phase2-review.md` and apply fixes.
 9. Update `usecase.yaml`: `phase: 2`, `pattern: <id>`, append a decision entry. Validate.
 10. Print: pattern and runner-up, components to reuse / extend / build new, open questions, next step `/gate 2`.

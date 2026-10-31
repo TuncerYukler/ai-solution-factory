@@ -38,7 +38,8 @@ Full design: `DESIGN.md`. These rules are the operative summary.
 - It must always validate against `framework/schemas/usecase.schema.json`. Run `python3 scripts/check_gate.py --validate-only <id>` if in doubt.
 - `decisions` is **append-only**. Add entries; never edit or remove existing ones.
 - Only `/gate` sets a gate to `passed`, and only with a human approver name supplied by the product owner.
-- `open_questions` entries have a `question` and an `owner`.
+- `open_questions` entries have an `id` (`OQ-01`, `OQ-02`, … never reused), a `question` and an `owner`.
+- In artifacts, cite open questions by ID: `OPEN: OQ-03 <short question>`. One `OPEN:` per question; don't add `OPEN:` notes for things already tracked — write `(provisional — see OQ-03)` instead.
 
 ## Common rules for every phase skill
 
@@ -46,7 +47,7 @@ Full design: `DESIGN.md`. These rules are the operative summary.
 2. Read everything in `inputs/` and all previous phases' outputs **before asking anything**.
 3. Ask only for what is still missing, **at most 5 questions per round**.
 4. Never invent facts. Anything unknown is written as `OPEN: <question>` and added to `open_questions` with an owner.
-5. Copy the template from `framework/templates/`, fill every heading, delete the guidance comments, save in the phase folder.
+5. Copy the template from `framework/templates/`, fill every heading, delete the guidance comments, save in the phase folder. Keep the template's table columns and their names; you may add a column, never rename or drop one. Write targets as `Target: 95%` (a plain number).
 6. Hand the draft to the lead subagent for review. Save its report in `reviews/`. Apply the fixes.
 7. Update `usecase.yaml` (phase, decisions, open questions) and print a short summary: what was produced, open questions, next command.
 

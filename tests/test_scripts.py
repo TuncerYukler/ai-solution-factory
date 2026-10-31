@@ -176,6 +176,55 @@ class GateOneTests(unittest.TestCase):
         self.assertTrue(report.passed, failures(report))
 
 
+class ToleranceTests(Workspace):
+    """Formatting Claude naturally produces must not fail a gate; wrong content still must."""
+
+    def test_accuracy_target_with_comparison_sign(self):
+        for text in ("Target: ≥ 95%", "Target: >= 95%", "Target: at least 95 %", "Target: 95% minimum"):
+            self.assertEqual(fl.percent(text, "Target"), 95.0, text)
+
+    def test_extra_table_column_and_annotated_level(self):
+        path = self.uc() / "01-requirements/process-map.md"
+        path.write_text(path.read_text().replace(
+            "| Step | Actor | Autonomy | HITL action |\n|---|---|---|---|\n"
+            "| Receive invoice | system | n/a | none |\n"
+            "| Extract fields and propose queue | AI | L1 | Clerk approves or edits |\n"
+            "| Post to ERP queue | system | n/a | none |",
+            "| Step | Description | Actor | Autonomy | HITL action |\n|---|---|---|---|---|\n"
+            "| 1 | Receive invoice | System | n/a | none |\n"
+            "| 2 | Extract fields | AI | L1 (provisional — see OQ-01) | Clerk approves |\n"
+            "| 3 | Post to ERP | system | n/a | none |"))
+        report = check_gate.run_gate(1, self.uc())
+        self.assertTrue(report.passed, failures(report))
+
+    def test_extra_column_still_catches_bad_actor_and_level(self):
+        path = self.uc() / "01-requirements/process-map.md"
+        path.write_text(path.read_text().replace(
+            "| Step | Actor | Autonomy | HITL action |\n|---|---|---|---|\n",
+            "| Step | Description | Actor | Autonomy | HITL action |\n|---|---|---|---|---|\n"
+            "| 9 | Mixed | System / AI | n/a | none |\n| 10 | Too far | AI | L3 | none |\n"))
+        text = "\n".join(failures(check_gate.run_gate(1, self.uc())))
+        self.assertIn("fix: 9", text)
+        self.assertIn("too high: 10 (L3)", text)
+
+    def test_open_items_match_by_id_or_close_wording(self):
+        self.set_state(self.uc(), open_questions=[
+            {"id": "OQ-01", "question": "Who owns exceptions over $50K?", "owner": "Dana Lee"},
+            {"id": "OQ-02", "question": "Does the Archer team approve API write access, and if so, what are the conditions?", "owner": "Marcus Ito"}])
+        canvas = self.uc() / "01-requirements/usecase-canvas.md"
+        canvas.write_text(canvas.read_text().replace(
+            "- OPEN: Who owns exceptions over $50K? (owner: Dana Lee)",
+            "- OPEN: OQ-01 exception ownership\n"
+            "- OPEN: Does the Archer team approve API write access? If yes, what are the conditions? (owner: Marcus Ito)\n"
+            "- Step 4 may change (provisional — see OQ-02)"))
+        report = check_gate.run_gate(1, self.uc())
+        self.assertTrue(report.passed, failures(report))
+        canvas.write_text(canvas.read_text() + "\n- OPEN: OQ-99 something nobody tracks\n- OPEN: Which bank pays the courier?\n")
+        text = "\n".join(failures(check_gate.run_gate(1, self.uc())))
+        self.assertIn("OQ-99", text)
+        self.assertIn("Which bank pays the courier?", text)
+
+
 class LaterGateTests(Workspace):
     def test_g2_requires_g1(self):
         report = check_gate.run_gate(2, self.uc())

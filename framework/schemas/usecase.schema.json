@@ -5,46 +5,154 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "id", "slug", "name", "department", "sponsor", "smes", "product_owner", "created",
-    "phase", "status", "risk_tier", "autonomy_target", "data_classification", "pattern",
-    "gates", "decisions", "open_questions"
+    "id",
+    "slug",
+    "name",
+    "department",
+    "sponsor",
+    "smes",
+    "product_owner",
+    "created",
+    "phase",
+    "status",
+    "risk_tier",
+    "autonomy_target",
+    "data_classification",
+    "pattern",
+    "gates",
+    "decisions",
+    "open_questions"
   ],
   "properties": {
-    "id": {"type": "string", "pattern": "^UC-[0-9]{3,}$"},
-    "slug": {"type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"},
-    "name": {"type": "string"},
-    "department": {"type": "string"},
-    "sponsor": {"type": "string"},
-    "smes": {"type": "array", "items": {"type": "string"}},
-    "product_owner": {"type": "string"},
-    "created": {"type": "string", "format": "date"},
-    "phase": {"type": "integer", "minimum": 0, "maximum": 5},
-    "status": {"enum": ["in_progress", "blocked", "parked", "rejected", "handed_off", "live"]},
-    "risk_tier": {"type": ["integer", "null"], "enum": [1, 2, 3, null]},
-    "autonomy_target": {"type": ["string", "null"], "enum": ["L0", "L1", "L2", "L3", null]},
+    "id": {
+      "type": "string",
+      "pattern": "^UC-[0-9]{3,}$"
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "name": {
+      "type": "string"
+    },
+    "department": {
+      "type": "string"
+    },
+    "sponsor": {
+      "type": "string"
+    },
+    "smes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "product_owner": {
+      "type": "string"
+    },
+    "created": {
+      "type": "string",
+      "format": "date"
+    },
+    "phase": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 5
+    },
+    "status": {
+      "enum": [
+        "in_progress",
+        "blocked",
+        "parked",
+        "rejected",
+        "handed_off",
+        "live"
+      ]
+    },
+    "risk_tier": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "enum": [
+        1,
+        2,
+        3,
+        null
+      ]
+    },
+    "autonomy_target": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "L0",
+        "L1",
+        "L2",
+        "L3",
+        null
+      ]
+    },
     "data_classification": {
       "description": "Use your organization's labels. Adjust this enum to match.",
-      "type": ["string", "null"],
-      "enum": ["Unclassified", "Protected A", "Protected B", "Protected C", null]
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "Unclassified",
+        "Protected A",
+        "Protected B",
+        "Protected C",
+        null
+      ]
     },
     "pattern": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "enum": [
-        "copilot-assistant", "rag-knowledge-assistant", "document-processing",
-        "workflow-automation", "single-agent-tools", "multi-agent-orchestration", null
+        "copilot-assistant",
+        "rag-knowledge-assistant",
+        "document-processing",
+        "workflow-automation",
+        "single-agent-tools",
+        "multi-agent-orchestration",
+        null
       ]
     },
     "gates": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["g0_intake", "g1_requirements", "g2_stack", "g3_design", "g4_test", "g5_rollout"],
+      "required": [
+        "g0_intake",
+        "g1_requirements",
+        "g2_stack",
+        "g3_design",
+        "g4_test",
+        "g5_rollout"
+      ],
       "properties": {
-        "g0_intake": {"$ref": "#/$defs/gate"},
-        "g1_requirements": {"$ref": "#/$defs/gate"},
-        "g2_stack": {"$ref": "#/$defs/gate"},
-        "g3_design": {"$ref": "#/$defs/gate"},
-        "g4_test": {"$ref": "#/$defs/gate"},
-        "g5_rollout": {"$ref": "#/$defs/gate"}
+        "g0_intake": {
+          "$ref": "#/$defs/gate"
+        },
+        "g1_requirements": {
+          "$ref": "#/$defs/gate"
+        },
+        "g2_stack": {
+          "$ref": "#/$defs/gate"
+        },
+        "g3_design": {
+          "$ref": "#/$defs/gate"
+        },
+        "g4_test": {
+          "$ref": "#/$defs/gate"
+        },
+        "g5_rollout": {
+          "$ref": "#/$defs/gate"
+        }
       }
     },
     "decisions": {
@@ -52,11 +160,24 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["date", "decision", "by"],
+        "required": [
+          "date",
+          "decision",
+          "by"
+        ],
         "properties": {
-          "date": {"type": "string", "format": "date"},
-          "decision": {"type": "string", "minLength": 1},
-          "by": {"type": "string", "minLength": 1}
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "decision": {
+            "type": "string",
+            "minLength": 1
+          },
+          "by": {
+            "type": "string",
+            "minLength": 1
+          }
         }
       }
     },
@@ -65,11 +186,28 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["question", "owner"],
+        "required": [
+          "question",
+          "owner"
+        ],
         "properties": {
-          "question": {"type": "string", "minLength": 1},
-          "owner": {"type": "string", "minLength": 1},
-          "raised": {"type": "string", "format": "date"}
+          "question": {
+            "type": "string",
+            "minLength": 1
+          },
+          "owner": {
+            "type": "string",
+            "minLength": 1
+          },
+          "raised": {
+            "type": "string",
+            "format": "date"
+          },
+          "id": {
+            "type": "string",
+            "pattern": "^OQ-[0-9]+$",
+            "description": "Stable ID; artifacts may cite it as 'OPEN: OQ-03 ...'"
+          }
         }
       }
     }
@@ -78,15 +216,47 @@
     "gate": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["status"],
+      "required": [
+        "status"
+      ],
       "properties": {
-        "status": {"enum": ["open", "passed", "failed"]},
-        "date": {"type": "string", "format": "date"},
-        "approver": {"type": "string"},
-        "outcome": {"enum": ["go", "no-go", "park"], "description": "G0 only"}
+        "status": {
+          "enum": [
+            "open",
+            "passed",
+            "failed"
+          ]
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "approver": {
+          "type": "string"
+        },
+        "outcome": {
+          "enum": [
+            "go",
+            "no-go",
+            "park"
+          ],
+          "description": "G0 only"
+        }
       },
-      "if": {"properties": {"status": {"const": "passed"}}},
-      "then": {"required": ["status", "date", "approver"]}
+      "if": {
+        "properties": {
+          "status": {
+            "const": "passed"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "status",
+          "date",
+          "approver"
+        ]
+      }
     }
   }
 }

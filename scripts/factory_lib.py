@@ -181,6 +181,28 @@ def empty_sections(text: str, template_name: str, required: Optional[List[str]] 
     return missing, empty
 
 
+def table_records(body: str, columns: List[str]) -> List[Dict[str, str]]:
+    """Rows of the first table as dicts keyed by the wanted column names.
+
+    Columns are found by header name (case-insensitive), so extra columns
+    such as "Description" don't shift anything. Falls back to position when
+    a header is missing.
+    """
+    header: List[str] = []
+    for line in body.splitlines():
+        s = line.strip()
+        if s.startswith("|"):
+            header = [c.strip().strip("*").lower() for c in s.strip("|").split("|")]
+            break
+    index = {}
+    for pos, col in enumerate(columns):
+        index[col] = header.index(col.lower()) if col.lower() in header else pos
+    records = []
+    for row in table_rows(body):
+        records.append({col: (row[i] if i < len(row) else "") for col, i in index.items()})
+    return records
+
+
 def table_rows(body: str) -> List[List[str]]:
     """Data rows of the first markdown table in body (header and separator dropped)."""
     rows: List[List[str]] = []
@@ -210,7 +232,8 @@ def ids(text: str, prefix: str) -> List[str]:
 
 
 def percent(body: str, label: str) -> Optional[float]:
-    m = re.search(r"{}:\s*([\d.]+)\s*%".format(label), body)
+    """Number in 'Label: 95%', also accepting '≥ 95%', '>= 95%', 'at least 95%', 'minimum 95%'."""
+    m = re.search(r"{}:\s*(?:≥|>=|>|at least|min(?:imum)?\.?)?\s*([\d.]+)\s*%".format(label), body, re.I)
     return float(m.group(1)) if m else None
 
 
@@ -257,16 +280,40 @@ def open_blockers(reviews_dir: Path, skip: Optional[str] = None) -> List[str]:
 
 def _norm(q: str) -> str:
     q = re.sub(r"\(owner:[^)]*\)", "", q, flags=re.I)
-    return re.sub(r"[^a-z0-9 ]", "", q.lower()).strip()
+    q = re.sub(r"\bOQ-\d+\b", "", q)
+    return re.sub(r"\s+", " ", re.sub(r"[^a-z0-9 ]", " ", q.lower())).strip()
+
+
+def _words(q: str) -> set:
+    stop = {"the", "a", "an", "of", "to", "for", "and", "or", "if", "is", "are", "on", "in", "by", "be", "eg", "e", "g", "so"}
+    return {w for w in _norm(q).split() if w not in stop}
+
+
+def _same_question(item: str, listed: str) -> bool:
+    """Same question despite small wording changes: containment or 70% word overlap."""
+    a, b = _norm(item), _norm(listed)
+    if not a or not b:
+        return False
+    if a in b or b in a:
+        return True
+    wa, wb = _words(item), _words(listed)
+    return bool(wa and wb) and len(wa & wb) / min(len(wa), len(wb)) >= 0.7
 
 
 def unlisted_open_items(texts: List[Tuple[str, str]], state: dict) -> List[str]:
-    """OPEN: items in artifacts that are not in usecase.yaml open_questions with an owner."""
-    listed = [_norm(q.get("question", "")) for q in state.get("open_questions", []) if q.get("owner")]
+    """OPEN: items in artifacts that are not in usecase.yaml open_questions with an owner.
+
+    An item matches when it cites a listed question's ID (e.g. "OPEN: OQ-03 ...")
+    or when its wording is close enough to a listed question.
+    """
+    owned = [q for q in state.get("open_questions", []) if q.get("owner")]
+    ids = {q["id"] for q in owned if q.get("id")}
     problems = []
     for name, text in texts:
         for m in re.finditer(r"OPEN:\s*(.+)", strip_comments(text)):
-            item = _norm(m.group(1))
-            if item and not any(item in q or q in item for q in listed if q):
-                problems.append("{}: 'OPEN: {}' is not in open_questions with an owner".format(name, m.group(1).strip()))
+            item = m.group(1)
+            if set(re.findall(r"\bOQ-\d+\b", item)) & ids:
+                continue
+            if not any(_same_question(item, q.get("question", "")) for q in owned):
+                problems.append("{}: 'OPEN: {}' is not in open_questions with an owner".format(name, item.strip()))
     return problems

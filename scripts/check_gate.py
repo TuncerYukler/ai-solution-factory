@@ -119,12 +119,14 @@ class GateChecker:
         process = self.artifact("process")
         if process is None:
             return
-        rows = fl.table_rows(fl.sections(process).get("To-be steps", ""))
+        rows = fl.table_records(fl.sections(process).get("To-be steps", ""), ["Step", "Actor", "Autonomy", "HITL action"])
         self.r.check(rows, "process-map.md: to-be steps table has rows")
         bad_actor, bad_level, too_high = [], [], []
         for row in rows:
-            row = (row + ["", "", "", ""])[:4]
-            step, actor, level = row[0], row[1].strip().lower(), row[2].strip().upper()
+            step, actor = row["Step"], row["Actor"].strip().lower()
+            level = row["Autonomy"].strip().upper()
+            m = re.match(r"(L[0-3]|N/A)\b", level)  # allow notes such as "L2 (provisional — see OQ-04)"
+            level = m.group(1) if m else level
             if actor not in ("ai", "human", "system"):
                 bad_actor.append(step)
             elif actor == "ai":
@@ -151,7 +153,8 @@ class GateChecker:
                 self.r.check(re.search(r"Pattern:\s*`?{}`?".format(re.escape(pattern)),
                                        s.get("Pattern chosen and why", "")),
                              "component-map.md: pattern matches usecase.yaml ({})".format(pattern))
-            rows = {r[0]: (r + [""] * 5)[:5] for r in fl.table_rows(s.get("Layers", "")) if r}
+            cols = ["Layer", "Needed", "Technology", "Reuse", "Owner"]
+            rows = {r["Layer"]: [r[c] for c in cols] for r in fl.table_records(s.get("Layers", ""), cols) if r["Layer"]}
             missing = [l for l in fl.LAYERS if l not in rows]
             self.r.check(not missing, "component-map.md: all 11 layers listed{}".format(
                 "" if not missing else " (missing: {})".format(", ".join(missing))))
